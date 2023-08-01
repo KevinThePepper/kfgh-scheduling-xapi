@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/kfgh-scheduling-xapi/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/kfgh-scheduling-xapi/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/kfgh-scheduling-xapi",
+  "projects": {
+    "kfgh-scheduling-xapi": {
+      "type": "application",
+      "root": "apps/kfgh-scheduling-xapi",
+      "entryFile": "main",
+      "sourceRoot": "apps/kfgh-scheduling-xapi/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/kfgh-scheduling-xapi/tsconfig.app.json"
+      }
+    },
+    "worker": {
+      "type": "application",
+      "root": "apps/worker",
+      "entryFile": "main",
+      "sourceRoot": "apps/worker/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/worker/tsconfig.app.json",
+        "assets": ["**/*.proto"],
+        "watchAssets": true
+      }
+    }
+  }
+}

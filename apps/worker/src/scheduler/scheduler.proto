@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package scheduler;
+
+service SchedulerService {
+  rpc FindOne (SchedulerById) returns (Scheduler) {}
+}
+
+message SchedulerById {
+  int32 id = 1;
+}
+
+message Scheduler {
+  int32 id = 1;
+  string name = 2;
+}
+
+message SchedulerCreate {
+  string message = 1;
+}
