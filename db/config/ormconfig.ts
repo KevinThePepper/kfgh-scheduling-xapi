@@ -5,6 +5,7 @@
  * ormconfig.stripped.js.
  * ***************************************************************************/
 
+import { Role } from "@app/api/roles/entities/role.entity";
 import { User } from "@app/api/users/entities/user.entity";
 import * as dotenv from "dotenv";
 import { join } from "path";
@@ -30,7 +31,7 @@ const DATABASE_CONFIG: PostgresConnectionOptions = {
   synchronize: process.env.DATABASE_SYNCHRONIZE === "true",
   migrationsTableName: "migrations",
   migrationsRun: true,
-  entities: [User],
+  entities: [User, Role],
   subscribers: [join(__dirname, "../../", "**/*.subscriber.ts")],
   migrations: [join(cwd, "db/migrations/*.js")],
   ssl:

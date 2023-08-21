@@ -1,7 +1,9 @@
+import { Privilege } from "@app/api/auth/auth.types";
 import { BaseEntityMixin } from "@app/common";
+import { Role } from "@app/api/roles/entities/role.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany } from "typeorm";
 
 @Entity({ schema: "user_management" })
 export class User extends BaseEntityMixin {
@@ -23,4 +25,22 @@ export class User extends BaseEntityMixin {
   @Column()
   @Exclude()
   password: string;
+
+  @ApiProperty({
+    description: "The roles this user assumes",
+    default: [],
+    type: [Role],
+  })
+  @ManyToMany(() => Role)
+  @JoinTable()
+  roles: Role[];
+
+  @ApiProperty({
+    description:
+      "Privileges assigned specifically to ths user outside of roles",
+    default: [],
+    type: Array<Privilege>,
+  })
+  @Column("text", { array: true, default: [], nullable: true })
+  privileges: Privilege[];
 }

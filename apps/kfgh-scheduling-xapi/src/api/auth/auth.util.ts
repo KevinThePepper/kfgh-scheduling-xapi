@@ -23,3 +23,16 @@ export const passwordsMatch = (
 ) => {
   return compareSync(plainPassword, encryptedPassword);
 };
+
+/**
+ * Checks whether a user contains roles that match the resource roles.
+ * @param resourceRoles The resource roles.
+ * @param userRoles The roles attached to the user.
+ * @returns Whether the user has matching roles with the resource.
+ */
+export const matchRoles = (
+  resourceRoles: string[],
+  userRoles: string[] = [],
+) => {
+  return resourceRoles.some((role) => userRoles.includes(role));
+};

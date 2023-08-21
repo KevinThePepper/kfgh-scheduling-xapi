@@ -5,12 +5,14 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
+import { ConfigType } from "@nestjs/config";
+import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import authConfig from "./auth.config";
-import { ConfigType } from "@nestjs/config";
-import { Reflector } from "@nestjs/core";
 import { IS_PUBLIC_KEY } from "./auth.decorator";
+import { JwtPayload } from "./auth.types";
+import { matchRoles } from "./auth.util";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,20 +28,31 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPublic) {
-      // 💡 See this condition
-      return true;
-    }
+    // permit if endpoint is public
+    if (isPublic) return true;
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
+
+    // deny if the token is not set
     if (!token) {
       throw new UnauthorizedException();
     }
+
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
         secret: this.config.jwtSecret,
       });
+
+      // check if any roles are required for this resource
+      const roles = this.reflector.get<string[]>("roles", context.getHandler());
+
+      if (roles && roles.length > 0) {
+        if (!matchRoles(roles, payload.roles)) {
+          throw new UnauthorizedException("mismatching roles");
+        }
+      }
+
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request["user"] = payload;
