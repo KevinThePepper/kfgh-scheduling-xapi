@@ -35,7 +35,7 @@
     "@nestjs/microservices": "^10.0.5",
     "@nestjs/passport": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
-    "@nestjs/swagger": "^7.1.1",
+    "@nestjs/swagger": "^7.1.2",
     "@nestjs/throttler": "^4.2.1",
     "@nestjs/typeorm": "^10.0.0",
     "bcrypt": "^5.1.0",
